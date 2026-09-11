@@ -17,6 +17,13 @@ body {
 }
 
 h1,
-h2 {
+h2,
+p{
   font-family: var(--font-pixel);
+  color: #f1f1f1;
+}
+
+a{
+  color: #f1f1f1;
+  text-decoration: underline;
 }

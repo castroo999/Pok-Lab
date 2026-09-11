@@ -13,7 +13,7 @@ export default function Header() {
 
         <nav className="navegacao">
           <NavLink to="/pokedex">Pokédex</NavLink>
-          <NavLink to="/times">Seus Times</NavLink>
+          <NavLink to="/ver-times">Seus Times</NavLink>
           <NavLink to="/analise">Análise</NavLink>
         </nav>
       </div>
