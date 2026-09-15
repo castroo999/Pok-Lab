@@ -37,7 +37,7 @@ const [sprite, setSprite] = useState<string | null>(null);
         <a href="/pokedex" className="btn">
           Acessar Pokédex
         </a>
-        <a href="/ver-times" className="btn">
+        <a href="/team-builder" className="btn">
           Ver Seus Times
         </a>
       </div>

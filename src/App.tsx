@@ -1,8 +1,9 @@
 import "./App.css";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import TeamBuilder from './pages/TeamBuilder'
 import { Pokedex } from "./pages/Pokedex";
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 export default function App() {
   return (
@@ -10,10 +11,11 @@ export default function App() {
       <Header />
 
       <Routes>
-        <Route path="/" element={<Hero />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/home" element={<Hero />} />
         <Route path="/pokedex" element={<Pokedex />} />
-        <Route path="/times" element={<h1>Seus Times</h1>} />
-        <Route path="/analise" element={<h1>Análise</h1>} />
+        <Route path="/team-builder" element={<TeamBuilder />} />
+        <Route path="/analise" element={<h1>analise</h1>} />
       </Routes>
     </>
   );

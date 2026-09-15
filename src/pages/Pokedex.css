@@ -12,6 +12,27 @@
   margin-bottom: 40px;
 }
 
+.voltar {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px 14px;
+	color: #f7fbf9;
+	background-color: #111a2e;
+	border: 1px solid #a9d1c8;
+	border-radius: 8px;
+	font: inherit;
+	font-weight: 700;
+	cursor: pointer;
+    transition: 0.5s ease;
+}
+
+.voltar:hover,
+.voltar:focus-visible {
+	background-color: #3b82f6;
+	transform: scale(1.07);
+}
+
 .btn-container {
   display: flex;
   justify-content: center;
@@ -102,6 +123,42 @@
 
 .input-busca input::placeholder {
   color: #64748b;
+}
+
+.regioes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.regioes select {
+  width: 250px;
+  padding: 10px 12px;
+  font-family: var(--font-main);
+  font-size: 13px;
+  color: #ffffff;
+  background: #111a2e;
+  border: 2px solid #263653;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.regioes select:hover {
+  border-color: #3b82f6;
+}
+
+.regioes select:focus {
+  border-color: #3b82f6;
+}
+
+.regioes option {
+  color: #ffffff;
+  background: #111a2e;
 }
 
 .pokedex-container {

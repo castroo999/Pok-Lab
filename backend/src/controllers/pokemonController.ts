@@ -1,6 +1,7 @@
 import { type Request, type Response } from "express";
 import { buscarPokedex, buscarPokemon } from "../services/pokemonService.js";
 
+
 // Controller para pegar os sprites dos pokemons
 export async function pegarSprites(req: Request, res: Response) {
   try {
@@ -39,9 +40,12 @@ export async function pegarPokemon(req: Request<{ id: string }>,res: Response,) 
 // Controller para pegar a pokedex
 export async function pegarPokedex(req: Request, res: Response) {
   try {
-    const { offset = 0 } = req.query;
+    const { offset = 0, regiao } = req.query;
 
-    const pokemons = await buscarPokedex(Number(offset));
+    const pokemons = await buscarPokedex(
+      Number(offset),
+      regiao as string
+    );
 
     res.status(200).json({ pokemons });
   } catch (error) {
