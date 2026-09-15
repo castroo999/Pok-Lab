@@ -1,5 +1,4 @@
 .builder-topo {
-  min-height: calc(100vh - 80px);
   padding: 40px 30px;
   background: #080f20;
 }
@@ -14,7 +13,7 @@
   color: #ffffff;
 }
 
-.builder-topo > p {
+.builder-topo>p {
   margin-bottom: 35px;
   text-align: center;
   font-family: var(--font-main);
@@ -32,7 +31,6 @@
 
 .pokemon-slot {
   min-height: 220px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,12 +68,106 @@
   image-rendering: pixelated;
 }
 
-
-
 .pokemon-slot h2 {
   margin-top: 5px;
   font-family: var(--font-main);
   font-size: 17px;
   color: #ffffff;
   text-transform: capitalize;
+}
+
+.montar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  color: #f7fbf9;
+  background-color: #111a2e;
+  border: 1px solid #a9d1c8;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+
+.montar:hover,
+.montar:focus-visible {
+  background-color: #3b82f6;
+  transform: scale(1.03);
+}
+
+.resultado-time {
+  max-width: 1200px;
+  margin: 60px auto 0;
+}
+
+.resultado-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.resultado-header h2 {
+  font-family: var(--font-pixel);
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.resultado-header span {
+  font-family: var(--font-main);
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.erro-time {
+  margin-top: 20px;
+  text-align: center;
+  font-family: var(--font-main);
+  color: #f87171;
+}
+
+.montar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tipos {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.tipo {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.pokemon-slot strong {
+  margin-top: 10px;
+  font-family: var(--font-main);
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.sem-gif {
+  width: 130px;
+  height: 130px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-pixel);
+  font-size: 30px;
+  color: #64748b;
 }

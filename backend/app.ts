@@ -1,6 +1,7 @@
 import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import  pokemonRoutes  from './src/routers/pokemonRoutes.js'
+import teamBuilderRoutes from './src/routers/teamBuilderRoutes.js'
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
@@ -18,7 +19,11 @@ app.use(helmet());
 // Permite que o Express receba JSON
 app.use(express.json());
 
+// Rota para usar as requisições dos pokemons
 app.use("/api", pokemonRoutes);
+
+// Rota para usar o team builder
+app.use('/api', teamBuilderRoutes)
 
 // Rota utilizada para verificar se a API está funcionando
 app.get("/", (_req: Request, res: Response) => {

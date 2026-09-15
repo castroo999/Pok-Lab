@@ -1,9 +1,21 @@
 import "./OptionJogos.css";
 
-export default function Jogos() {
+type JogosProps = {
+  jogo: string;
+  setJogo: React.Dispatch<React.SetStateAction<string>>;
+  objetivo: string;
+  setObjetivo: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export default function Jogos({
+  jogo,
+  setJogo,
+  objetivo,
+  setObjetivo,
+}: JogosProps) {
   return (
     <div className="jogos">
-      <select>
+      <select value={jogo} onChange={(e) => setJogo(e.target.value)}>
         <option value="FireRed">FireRed</option>
         <option value="LeafGreen">LeafGreen</option>
         <option value="Emerald">Emerald</option>
@@ -36,27 +48,50 @@ export default function Jogos() {
         <h2>Qual seu objetivo no jogo?</h2>
 
         <label>
-          <input type="radio" name="grupo" value="opcao1" />
+          <input
+            type="radio"
+            name="grupo"
+            value="speedrun"
+            checked={objetivo === "speedrun"}
+            onChange={(e) => setObjetivo(e.target.value)}
+          />
           Speed run
         </label>
 
         <label>
-          <input type="radio" name="grupo" value="opcao2" />
+          <input
+            type="radio"
+            name="grupo"
+            value="platinar"
+            checked={objetivo === "platinar"}
+            onChange={(e) => setObjetivo(e.target.value)}
+          />
           Platinar
         </label>
 
         <label>
-          <input type="radio" name="grupo" value="opcao3" />
-          Otimização de tipos
+          <input
+            type="radio"
+            name="grupo"
+            value="otimizacao"
+            checked={objetivo === "otimizacao"}
+            onChange={(e) => setObjetivo(e.target.value)}
+          />
+          Otimização
         </label>
 
         <label>
-          <input type="radio" name="grupo" value="opcao4" />
+          <input
+            type="radio"
+            name="grupo"
+            value="aleatorio"
+            checked={objetivo === "aleatorio"}
+            onChange={(e) => setObjetivo(e.target.value)}
+          />
           Aleatório (geramos um time aleatório para aumentar sua dificuldade)
         </label>
       </div>
 
-      <button className="montar">Montar time</button>
     </div>
   );
 }
