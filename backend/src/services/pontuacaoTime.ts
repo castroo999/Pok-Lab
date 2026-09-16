@@ -70,35 +70,25 @@ const VANTAGENS: Record<string, string[]> = {
 export function pontuarPokemon(
   pokemon: {
     id: number;
-
     nome: string;
-
     gif: string | null;
-
     tipos: string[];
-
     habilidades: {
       nome: string;
       oculta: boolean;
     }[];
-
     stats: Record<string, number>;
   },
-
   objetivo: string,
-
   regiaoJogo: string,
-
   disponibilidade?: {
     jornada: {
       utilizavel: boolean;
       penalidade: number;
     };
-
     primeiraDisponibilidade: {
       progresso: number;
     } | null;
-
     tempoEstimado: {
       valor: number;
     };
@@ -120,32 +110,15 @@ export function pontuarPokemon(
     hp + ataque + defesa + ataqueEspecial + defesaEspecial + velocidade;
 
   /*
-    REGIÃO DO POKÉMON
-
-    Descobrimos a região de origem
-    através do número da Pokédex.
-
-    Exemplo:
-
-    1-151   = Kanto
-    152-251 = Johto
-    252-386 = Hoenn
-    etc.
+    Descobre a região de origem
+    do Pokémon.
   */
 
   const regiaoPokemon = descobrirRegiaoPokemon(pokemon.id);
 
   /*
-    BÔNUS REGIONAL
-
-    Se o Pokémon pertence à região
-    do jogo selecionado, recebe
-    uma preferência adicional.
-
-    Isso NÃO obriga o algoritmo
-    a escolher Pokémon da região.
-
-    Apenas aumenta sua pontuação.
+    Pokémon da região do jogo
+    recebem preferência.
   */
 
   let bonusRegional = 0;
@@ -154,78 +127,35 @@ export function pontuarPokemon(
     bonusRegional = 20;
   }
 
-  let pontuacao = 0;
-
   /*
-    SPEEDRUN
-
-    Prioriza:
-    - velocidade
-    - ataque
-    - ataque especial
-    - bons stats gerais
+    Pontuação baseada no objetivo.
   */
+
+  let pontuacao: number;
 
   if (objetivo === "speedrun") {
     pontuacao =
       totalStats * 0.3 + velocidade * 0.8 + ataque * 0.5 + ataqueEspecial * 0.5;
   } else if (objetivo === "platinar") {
-
-  /*
-    PLATINAR
-
-    Prioriza:
-    - stats gerais
-    - HP
-    - defesa
-    - defesa especial
-  */
     pontuacao =
       totalStats * 0.6 + hp * 0.2 + defesa * 0.2 + defesaEspecial * 0.2;
   } else if (objetivo === "otimizacao") {
-
-  /*
-    OTIMIZAÇÃO
-
-    Busca um Pokémon
-    forte e equilibrado.
-  */
     pontuacao =
       totalStats * 0.7 + velocidade * 0.3 + ataque * 0.3 + ataqueEspecial * 0.3;
   } else if (objetivo === "aleatorio") {
-
-  /*
-    ALEATÓRIO
-
-    Ignora a força do Pokémon
-    e gera uma pontuação aleatória.
-  */
     pontuacao = Math.random() * 100;
   } else {
-
-  /*
-    Caso algum objetivo
-    desconhecido seja enviado.
-  */
     pontuacao = totalStats * 0.5;
   }
 
   /*
-    ADICIONA O BÔNUS REGIONAL
-
-    O bônus entra depois
-    da pontuação baseada no objetivo.
+    Bônus regional.
   */
 
   pontuacao += bonusRegional;
 
   /*
-    PENALIZAÇÃO DE DISPONIBILIDADE
-
-    Um Pokémon muito forte,
-    mas disponível somente
-    no pós-jogo, não deve
-    dominar um time de campanha.
+    Penalização de disponibilidade.
   */
 
   if (disponibilidade) {
@@ -236,15 +166,10 @@ export function pontuarPokemon(
 
   return {
     id: pokemon.id,
-
     nome: pokemon.nome,
-
     gif: pokemon.gif,
-
     tipos: pokemon.tipos,
-
     habilidades: pokemon.habilidades,
-
     stats: pokemon.stats,
 
     pontuacao: Math.max(0, Math.round(pontuacao)),
