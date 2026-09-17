@@ -1,92 +1,75 @@
 import axios from "axios";
 
-type ApiResource = {
-  name: string;
-  url: string;
-};
-
 type VersionGroupResponse = {
-  name: string;
-
-  pokedexes: ApiResource[];
-};
-
-type PokedexResponse = {
-  name: string;
-
-  pokemon_entries: {
-    entry_number: number;
-
-    pokemon_species: ApiResource;
+  pokedexes: {
+    name: string;
+    url: string;
   }[];
 };
 
-const cachePokedex = new Map<string, number[]>();
+type PokedexResponse = {
+  pokemon_entries: {
+    entry_number: number;
+    pokemon_species: {
+      name: string;
+      url: string;
+    };
+  }[];
+};
 
-/*
-  Descobre todos os Pokémon catalogados
-  nas Pokédexes daquele grupo de versões.
-*/
+export async function buscarPokemonDoJogo(
+  versionGroup: string,
+) {
+  const response =
+    await axios.get<VersionGroupResponse>(
+      `https://pokeapi.co/api/v2/version-group/${versionGroup}`,
+    );
 
-export async function buscarPokemonDoJogo(versionGroup: string) {
-  const cache = cachePokedex.get(versionGroup);
+  const pokedexes =
+    response.data.pokedexes;
 
-  if (cache) {
-    return cache;
-  }
+  const pokedexesUnicos =
+    Array.from(
+      new Map(
+        pokedexes.map((pokedex) => [
+          pokedex.url,
+          pokedex,
+        ]),
+      ).values(),
+    );
 
-  /*
-    Primeiro descobrimos quais Pokédexes
-    pertencem ao grupo de versões.
-  */
+  const respostas =
+    await Promise.all(
+      pokedexesUnicos.map(
+        async (pokedex) => {
+          const responsePokedex =
+            await axios.get<PokedexResponse>(
+              pokedex.url,
+            );
 
-  const response = await axios.get<VersionGroupResponse>(
-    `https://pokeapi.co/api/v2/version-group/${versionGroup}`,
-  );
+          return responsePokedex
+            .data.pokemon_entries;
+        },
+      ),
+    );
 
-  const pokedexes = response.data.pokedexes;
+  const ids = respostas
+    .flat()
+    .map((entry) => {
+      const partes =
+        entry.pokemon_species.url
+          .split("/")
+          .filter(Boolean);
 
-  /*
-    Buscamos todas as Pokédexes
-    daquele grupo.
-  */
+      return Number(
+        partes[partes.length - 1],
+      );
+    })
+    .filter(
+      (id) => Number.isInteger(id),
+    );
 
-  const dadosPokedex = await Promise.all(
-    pokedexes.map(async (pokedex) => {
-      const response = await axios.get<PokedexResponse>(pokedex.url);
-
-      return response.data;
-    }),
-  );
-
-  /*
-    Junta todos os Pokémon.
-  */
-
-  const ids = dadosPokedex.flatMap((pokedex) =>
-    pokedex.pokemon_entries.map((entry) =>
-      Number(entry.pokemon_species.url.split("/").filter(Boolean).pop()),
-    ),
-  );
-
-  /*
-    Remove IDs duplicados.
-
-    Isso é importante porque um Pokémon
-    pode aparecer em mais de uma Pokédex.
-  */
-
-  const idsUnicos = [...new Set(ids)];
-
-  /*
-    Guarda no cache.
-
-    Se o usuário pedir Shield novamente,
-    não precisamos consultar as Pokédexes
-    outra vez.
-  */
-
-  cachePokedex.set(versionGroup, idsUnicos);
-
-  return idsUnicos;
+  return Array.from(
+    new Set(ids),
+  ).sort((a, b) => a - b);
 }

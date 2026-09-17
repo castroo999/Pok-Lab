@@ -12,7 +12,7 @@
   color: #ffffff;
 }
 
-.builder-topo > p {
+.builder-topo>p {
   margin-bottom: 35px;
   text-align: center;
   font-family: var(--font-main);
@@ -24,25 +24,23 @@
   max-width: 1200px;
   margin: 40px auto 0;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
 .pokemon-slot {
-  min-height: 220px;
+  min-height: 430px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 15px;
   background: #111a2e;
   border: 2px solid #263653;
   border-radius: 8px;
   text-align: center;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background-color 0.2s ease;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .pokemon-slot:hover {
@@ -74,8 +72,7 @@
 }
 
 .montar {
-  margin: 0 auto;
-  margin-top: 10px;
+  margin: 10px auto 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,6 +92,12 @@
 .montar:focus-visible {
   background-color: #3b82f6;
   transform: scale(1.03);
+}
+
+.montar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .resultado-time {
@@ -128,12 +131,6 @@
   color: #f87171;
 }
 
-.montar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
 .tipos {
   display: flex;
   justify-content: center;
@@ -143,12 +140,30 @@
 }
 
 .tipo {
-  padding: 4px 8px;
+  padding: 5px 9px;
   border-radius: 4px;
   font-family: var(--font-main);
   font-size: 11px;
   text-transform: uppercase;
   font-weight: 700;
+  color: #ffffff !important;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.tipo.normal,
+.tipo.steel,
+.tipo.ice,
+.tipo.electric,
+.tipo.bug,
+.tipo.flying,
+.tipo.golpe.normal,
+.tipo-golpe.steel,
+.tipo-golpe.ice,
+.tipo-golpe.electric,
+.tipo-golpe.bug,
+.tipo-golpe.flying {
+  color: #111827 !important;
+  text-shadow: none;
 }
 
 .pokemon-slot strong {
@@ -161,12 +176,62 @@
 .sem-gif {
   width: 130px;
   height: 130px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-family: var(--font-pixel);
   font-size: 30px;
   color: #64748b;
+}
+
+.golpes {
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.golpe {
+  width: 100%;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  color: #f7fbf9;
+  padding: 5px 7px;
+  background: #0b1426;
+  border: 1px solid #263653;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.golpe span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-main);
+  font-size: 10px;
+  font-weight: 600;
+  color: #f1f5f9;
+  text-transform: capitalize;
+}
+
+.tipo-golpe {
+  flex-shrink: 0;
+  padding: 4px 7px;
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff !important;
+  text-shadow: 1px 1px 0 #000000;
+}
+
+.golpe:hover {
+  border-color: #3b82f6;
+  background: #111f38;
 }

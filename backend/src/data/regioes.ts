@@ -15,12 +15,12 @@ export const regioes = {
   },
 
   sinnoh: {
-    inicio:  387,
+    inicio: 387,
     fim: 493,
   },
 
   unova: {
-    inicio:494,
+    inicio: 494,
     fim: 649,
   },
 
@@ -39,12 +39,16 @@ export const regioes = {
     fim: 905,
   },
 
+  hisui: {
+    inicio: 155,
+    fim: 905,
+  },
+
   paldea: {
     inicio: 906,
-    fim: 1025
-  }
-
-};
+    fim: 1025,
+  },
+} as const;
 
 export function descobrirRegiaoPokemon(id: number) {
   if (id >= 1 && id <= 151) return "kanto";

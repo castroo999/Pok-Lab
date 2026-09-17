@@ -1,21 +1,18 @@
 export type PokemonTime = {
   id: number;
-
   nome: string;
-
   gif: string | null;
-
   tipos: string[];
-
   habilidades: {
     nome: string;
     oculta: boolean;
   }[];
-
   stats: Record<string, number>;
-
+  golpes: {
+    nome: string;
+    tipo: string;
+  }[];
   pontuacao: number;
-
   disponibilidade: {
     disponivel: boolean;
 

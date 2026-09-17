@@ -4,97 +4,66 @@ import { pokemonLendariosEMiticos } from "../data/pokemonProibidos.js";
 
 export function montarTime(
   candidatos: PokemonPontuado[],
-  iniciais: readonly number[],
+  formasFinais: readonly number[],
   tamanho = 6,
 ) {
   const candidatosValidos = candidatos.filter(
-    (pokemon) =>
-      !pokemonLendariosEMiticos.has(pokemon.id),
+    (pokemon) => !pokemonLendariosEMiticos.has(pokemon.id),
   );
 
   if (candidatosValidos.length === 0) {
-    throw new Error(
-      "Nenhum Pokémon válido para montar o time.",
-    );
+    throw new Error("Nenhum Pokémon válido para montar o time.");
   }
 
-  const iniciaisDisponiveis =
-    candidatosValidos.filter((pokemon) =>
-      iniciais.includes(pokemon.id),
-    );
-
-  if (iniciaisDisponiveis.length === 0) {
-    throw new Error(
-      "Nenhum Pokémon inicial disponível.",
-    );
-  }
-
-  iniciaisDisponiveis.sort(
-    (a, b) => b.pontuacao - a.pontuacao,
+  const iniciaisDisponiveis = candidatosValidos.filter((pokemon) =>
+    formasFinais.includes(pokemon.id),
   );
 
-  const primeiroPokemon =
-    iniciaisDisponiveis[0];
-
-  if (!primeiroPokemon) {
-    throw new Error(
-      "Não foi possível selecionar o inicial.",
-    );
+  if (iniciaisDisponiveis.length === 0) {
+    throw new Error("Nenhuma forma final de inicial disponível.");
   }
 
-  const time: PokemonPontuado[] = [
-    primeiroPokemon,
-  ];
+  iniciaisDisponiveis.sort((a, b) => b.pontuacao - a.pontuacao);
 
-  const candidatosRestantes =
-    candidatosValidos.filter(
-      (pokemon) =>
-        pokemon.id !== primeiroPokemon.id,
-    );
+  const primeiroPokemon = iniciaisDisponiveis[0];
 
-  while (
-    time.length < tamanho &&
-    candidatosRestantes.length > 0
-  ) {
-    let melhorPokemon =
-      candidatosRestantes[0];
+  if (!primeiroPokemon) {
+    throw new Error("Não foi possível selecionar o inicial.");
+  }
+
+  const time: PokemonPontuado[] = [primeiroPokemon];
+
+  const candidatosRestantes = candidatosValidos.filter(
+    (pokemon) => !formasFinais.includes(pokemon.id),
+  );
+
+  while (time.length < tamanho && candidatosRestantes.length > 0) {
+    let melhorPokemon = candidatosRestantes[0];
 
     if (!melhorPokemon) {
       break;
     }
 
-    let melhorPontuacao =
-      pontuarCandidato(
-        melhorPokemon,
-        time,
-      );
+    let melhorPontuacao = pontuarCandidato(melhorPokemon, time);
 
     for (const candidato of candidatosRestantes) {
-      const pontuacao =
-        pontuarCandidato(
-          candidato,
-          time,
-        );
+      const pontuacao = pontuarCandidato(candidato, time);
 
       if (pontuacao > melhorPontuacao) {
         melhorPokemon = candidato;
+
         melhorPontuacao = pontuacao;
       }
     }
 
     time.push(melhorPokemon);
 
-    const indice =
-      candidatosRestantes.findIndex(
-        (pokemon) =>
-          pokemon.id === melhorPokemon.id,
-      );
+    const indice = candidatosRestantes.findIndex(
+      (pokemon) => pokemon.id === melhorPokemon.id,
+    );
 
     if (indice !== -1) {
-      candidatosRestantes.splice(
-        indice,
-        1,
-      );
+      candidatosRestantes.splice(indice, 1);
     }
   }
 

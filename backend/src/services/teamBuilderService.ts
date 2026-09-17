@@ -1,13 +1,36 @@
-
 import { jogos } from "../data/jogos.js";
-import { regrasJogo } from "../data/regrasJogo.js";
-import { pokemonLendariosEMiticos } from "../data/pokemonProibidos.js";
-import { verificarDisponibilidade } from "./pokemonDisponibilidade.js";
-import { buscarDadosPokemon } from "./pokemonService.js";
-import { pontuarPokemon } from "./pontuacaoTime.js";
-import { montarTime } from "./timesAleatorios.js";
-import { buscarPokemonDoJogo } from "./pokedexJogo.js";
-import type { PokemonPontuado } from "./pontuacaoTime.js";
+
+import {
+  regrasJogo,
+} from "../data/regrasJogo.js";
+
+import {
+  pokemonLendariosEMiticos,
+} from "../data/pokemonProibidos.js";
+
+import {
+  verificarDisponibilidade,
+} from "./pokemonDisponibilidade.js";
+
+import {
+  buscarDadosPokemon,
+} from "./pokemonService.js";
+
+import {
+  pontuarPokemon,
+} from "./pontuacaoTime.js";
+
+import {
+  montarTime,
+} from "./timesAleatorios.js";
+
+import {
+  buscarPokemonDoJogo,
+} from "./pokedexJogo.js";
+
+import type {
+  PokemonPontuado,
+} from "./pontuacaoTime.js";
 
 type TeamBuilderInput = {
   jogo: string;
@@ -20,120 +43,211 @@ export async function montarTimeService({
   jogo,
   objetivo,
 }: TeamBuilderInput) {
-  const jogoSelecionado = jogos[jogo as keyof typeof jogos];
-  const regraJogo = regrasJogo[jogo as keyof typeof regrasJogo];
+  const jogoSelecionado =
+    jogos[
+      jogo as keyof typeof jogos
+    ];
+
+  const regraJogo =
+    regrasJogo[
+      jogo as keyof typeof regrasJogo
+    ];
 
   if (!jogoSelecionado) {
-    throw new Error("Jogo não suportado");
+    throw new Error(
+      "Jogo não suportado",
+    );
   }
 
   if (!regraJogo) {
-    throw new Error("Regras do jogo não encontradas");
+    throw new Error(
+      "Regras do jogo não encontradas",
+    );
   }
 
-  const pokemonIds = await buscarPokemonDoJogo(
-    jogoSelecionado.versionGroup,
-  );
+  const pokemonIds =
+    await buscarPokemonDoJogo(
+      jogoSelecionado.versionGroup,
+    );
 
   console.log(
     `Pokémon encontrados para ${jogo}:`,
     pokemonIds.length,
   );
 
-  const candidatos: PokemonPontuado[] = [];
+  const candidatos: PokemonPontuado[] =
+    [];
 
   for (
     let inicio = 0;
     inicio < pokemonIds.length;
     inicio += TAMANHO_LOTE
   ) {
-    const lote = pokemonIds.slice(
-      inicio,
-      inicio + TAMANHO_LOTE,
-    );
+    const lote =
+      pokemonIds.slice(
+        inicio,
+        inicio +
+          TAMANHO_LOTE,
+      );
 
     console.log(
       `Processando ${inicio + 1}-${Math.min(
-        inicio + TAMANHO_LOTE,
+        inicio +
+          TAMANHO_LOTE,
         pokemonIds.length,
       )} de ${pokemonIds.length}`,
     );
 
-    const candidatosLote = await Promise.all(
-      lote.map(async (pokemonId) => {
-        try {
-          if (pokemonLendariosEMiticos.has(pokemonId)) {
-            return null;
-          }
+    const candidatosLote =
+      await Promise.all(
+        lote.map(
+          async (pokemonId) => {
+            try {
+              if (
+                pokemonLendariosEMiticos.has(
+                  pokemonId,
+                )
+              ) {
+                return null;
+              }
 
-          const disponibilidade =
-            await verificarDisponibilidade(
-              pokemonId,
-              jogoSelecionado.apiName,
-            );
+              const disponibilidade =
+                await verificarDisponibilidade(
+                  pokemonId,
+                  jogoSelecionado.apiName,
+                );
 
-          const ehInicial = (
-            regraJogo.iniciais as readonly number[]
-          ).includes(pokemonId);
+              const ehInicial =
+                (
+                  regraJogo.iniciais as readonly number[]
+                ).includes(
+                  pokemonId,
+                );
 
-          if (
-            !disponibilidade.disponivel &&
-            !ehInicial
-          ) {
-            return null;
-          }
+              if (
+                !disponibilidade.disponivel &&
+                !ehInicial
+              ) {
+                return null;
+              }
 
-          const dados = await buscarDadosPokemon(
-            pokemonId,
-          );
+              const dados =
+                await buscarDadosPokemon(
+                  pokemonId,
+                  jogoSelecionado.versionGroup,
+                );
 
-          const pokemonPontuado =
-            pontuarPokemon(
-              dados,
-              objetivo,
-              jogoSelecionado.regiao,
-              disponibilidade,
-            );
+              const pokemonPontuado =
+                pontuarPokemon(
+                  dados,
+                  objetivo,
+                  jogoSelecionado.regiao,
+                  disponibilidade,
+                );
 
-          return {
-            ...pokemonPontuado,
-            disponibilidade,
-          };
-        } catch (error) {
-          console.error(
-            `Erro ao processar Pokémon ${pokemonId}:`,
-            error,
-          );
+              return {
+                ...pokemonPontuado,
+                disponibilidade,
+              };
+            } catch (error) {
+              console.error(
+                `Erro ao processar Pokémon ${pokemonId}:`,
+                error,
+              );
 
-          return null;
-        }
-      }),
-    );
+              return null;
+            }
+          },
+        ),
+      );
 
-    for (const pokemon of candidatosLote) {
-      if (pokemon !== null) {
-        candidatos.push(pokemon);
+    for (
+      const pokemon of candidatosLote
+    ) {
+      if (
+        pokemon !== null
+      ) {
+        candidatos.push(
+          pokemon,
+        );
       }
     }
   }
 
-  if (candidatos.length === 0) {
+  if (
+    candidatos.length === 0
+  ) {
     throw new Error(
       "Nenhum Pokémon disponível para esse jogo.",
     );
   }
 
-  const iniciaisDisponiveis = candidatos.filter(
-    (pokemon) =>
-      (
-        regraJogo.iniciais as readonly number[]
-      ).includes(pokemon.id),
-  );
+  const formasFinais =
+    regraJogo.formasFinais as readonly number[];
 
-  if (iniciaisDisponiveis.length === 0) {
+  const iniciaisFinais:
+    PokemonPontuado[] = [];
+
+  for (
+    const formaFinalId of formasFinais
+  ) {
+    try {
+      if (
+        pokemonLendariosEMiticos.has(
+          formaFinalId,
+        )
+      ) {
+        continue;
+      }
+
+      const dados =
+        await buscarDadosPokemon(
+          formaFinalId,
+          jogoSelecionado.versionGroup,
+        );
+
+      const pokemonPontuado =
+        pontuarPokemon(
+          dados,
+          objetivo,
+          jogoSelecionado.regiao,
+        );
+
+      iniciaisFinais.push(
+        pokemonPontuado,
+      );
+    } catch (error) {
+      console.error(
+        `Erro ao buscar inicial final ${formaFinalId}:`,
+        error,
+      );
+    }
+  }
+
+  if (
+    iniciaisFinais.length ===
+    0
+  ) {
     throw new Error(
-      "Nenhum Pokémon inicial disponível para esse jogo.",
+      "Nenhum inicial final disponível para esse jogo.",
     );
+  }
+
+  for (
+    const inicial of iniciaisFinais
+  ) {
+    const jaExiste =
+      candidatos.some(
+        (pokemon) =>
+          pokemon.id ===
+          inicial.id,
+      );
+
+    if (!jaExiste) {
+      candidatos.push(
+        inicial,
+      );
+    }
   }
 
   console.log(
@@ -141,18 +255,24 @@ export async function montarTimeService({
   );
 
   console.log(
-    `Iniciais disponíveis: ${iniciaisDisponiveis.length}`,
+    `Iniciais finais disponíveis: ${iniciaisFinais.length}`,
   );
 
-  const time = montarTime(
-    candidatos,
-    regraJogo.iniciais,
-  );
+  const time =
+    montarTime(
+      candidatos,
+      formasFinais,
+    );
 
   return {
-    jogo: jogoSelecionado.nome,
+    jogo:
+      jogoSelecionado.nome,
+
     objetivo,
-    quantidadeDisponivel: candidatos.length,
+
+    quantidadeDisponivel:
+      candidatos.length,
+
     time,
   };
 }

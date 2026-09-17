@@ -20,7 +20,6 @@ export default function Times() {
   async function montarTime() {
     if (!jogo || !objetivo) {
       setErro("Escolha o jogo e o objetivo antes de montar o time.");
-
       return;
     }
 
@@ -31,11 +30,9 @@ export default function Times() {
 
       const response = await fetch("http://localhost:3000/api/team-builder", {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
           jogo,
           objetivo,
@@ -56,6 +53,28 @@ export default function Times() {
     } finally {
       setCarregando(false);
     }
+  }
+
+  function salvarTime() {
+    if (!resultado) return;
+
+    const timesSalvos = localStorage.getItem("timesSalvos");
+
+    const times = timesSalvos ? JSON.parse(timesSalvos) : [];
+
+    const novoTime = {
+      id: crypto.randomUUID(),
+      nome: `Time ${resultado.jogo}`,
+      jogo: resultado.jogo,
+      objetivo: resultado.objetivo,
+      time: resultado.time,
+    };
+
+    times.push(novoTime);
+
+    localStorage.setItem("timesSalvos", JSON.stringify(times));
+
+    alert("Time salvo com sucesso!");
   }
 
   function voltar() {
@@ -121,9 +140,25 @@ export default function Times() {
                 </div>
 
                 <strong>Pontuação: {pokemon.pontuacao}</strong>
+
+                <div className="golpes">
+                  {pokemon.golpes.map((golpe) => (
+                    <div className="golpe" key={golpe.nome}>
+                      <span>{golpe.nome}</span>
+
+                      <span className={`tipo-golpe ${golpe.tipo}`}>
+                        {golpe.tipo}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </article>
             ))}
           </div>
+
+          <button className="salvar-time" type="button" onClick={salvarTime}>
+            Salvar time
+          </button>
         </section>
       )}
     </section>

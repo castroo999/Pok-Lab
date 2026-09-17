@@ -38,7 +38,7 @@ const [sprite, setSprite] = useState<string | null>(null);
           Acessar Pokédex
         </a>
         <a href="/team-builder" className="btn">
-          Ver Seus Times
+          Montar Times
         </a>
       </div>
     </section>
