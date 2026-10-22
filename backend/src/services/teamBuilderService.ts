@@ -135,6 +135,7 @@ export async function montarTimeService({
                 await buscarDadosPokemon(
                   pokemonId,
                   jogoSelecionado.versionGroup,
+                  false,
                 );
 
               const pokemonPontuado =
@@ -204,6 +205,7 @@ export async function montarTimeService({
         await buscarDadosPokemon(
           formaFinalId,
           jogoSelecionado.versionGroup,
+          false,
         );
 
       const pokemonPontuado =
@@ -264,6 +266,21 @@ export async function montarTimeService({
       formasFinais,
     );
 
+  const timeComGolpes = await Promise.all(
+    time.map(async (pokemon) => {
+      try {
+        const detalhes = await buscarDadosPokemon(
+          pokemon.id,
+          jogoSelecionado.versionGroup,
+        );
+        return { ...pokemon, golpes: detalhes.golpes };
+      } catch (error) {
+        console.error(`Erro ao buscar golpes do Pokémon ${pokemon.id}:`, error);
+        return pokemon;
+      }
+    }),
+  );
+
   return {
     jogo:
       jogoSelecionado.nome,
@@ -273,6 +290,6 @@ export async function montarTimeService({
     quantidadeDisponivel:
       candidatos.length,
 
-    time,
+    time: timeComGolpes,
   };
 }

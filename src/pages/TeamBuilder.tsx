@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import Jogos from "../components/OptionJogos";
 import type { ResultadoTime } from "../types/teamBuilderTypes";
+import { apiUrl } from "../lib/api";
 
 export default function Times() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export default function Times() {
       setErro("");
       setResultado(null);
 
-      const response = await fetch("http://localhost:3000/api/team-builder", {
+      const response = await fetch(apiUrl("team-builder"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,11 +40,10 @@ export default function Times() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Erro ao montar o time.");
-      }
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.erro || body.mensagem || "Erro ao montar o time.");
 
-      const data: ResultadoTime = await response.json();
+      const data: ResultadoTime = body;
 
       setResultado(data);
     } catch (error) {

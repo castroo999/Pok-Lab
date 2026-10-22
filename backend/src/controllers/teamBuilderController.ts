@@ -1,5 +1,6 @@
 import { type Request, type Response } from "express";
 import { montarTimeService } from "../services/teamBuilderService.js";
+import { jogos } from "../data/jogos.js";
 
 export async function teamBuilder(req: Request, res: Response) {
   try {
@@ -10,6 +11,12 @@ export async function teamBuilder(req: Request, res: Response) {
     if (!jogo || !objetivo) {
       return res.status(400).json({
         erro: "Jogo e objetivo são obrigatórios",
+      });
+    }
+
+    if (!(jogo in jogos)) {
+      return res.status(400).json({
+        erro: "Jogo não suportado. Escolha um dos jogos disponíveis na lista.",
       });
     }
 

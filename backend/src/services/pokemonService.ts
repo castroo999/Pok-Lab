@@ -407,6 +407,7 @@ function selecionarMelhoresGolpes(
 export async function buscarDadosPokemon(
   id: number,
   versionGroup?: string,
+  incluirGolpes = true,
 ) {
   const response =
     await axios.get<PokemonApiResponse>(
@@ -437,7 +438,8 @@ export async function buscarDadosPokemon(
     )?.base_stat ?? 0;
 
   const golpesDisponiveis =
-    versionGroup
+    incluirGolpes
+      ? (versionGroup
       ? pokemon.moves.filter(
           (item) =>
             item.version_group_details.some(
@@ -448,7 +450,8 @@ export async function buscarDadosPokemon(
                 versionGroup,
             ),
         )
-      : pokemon.moves;
+      : pokemon.moves).slice(-12)
+      : [];
 
   const golpes =
     await Promise.all(
@@ -595,17 +598,23 @@ export async function buscarPokedex(
   const resultados =
     response.data.results;
 
-  const pokemons =
-    await Promise.all(
-      resultados.map(
-        (pokemon: {
-          name: string;
-        }) =>
-          buscarPokemon(
-            pokemon.name,
-          ),
-      ),
+  const pokemons: Awaited<ReturnType<typeof buscarPokemon>>[] = [];
+
+  // Mantém a carga moderada e ainda retorna os Pokémon que carregaram caso
+  // uma consulta individual à PokéAPI falhe.
+  for (let inicio = 0; inicio < resultados.length; inicio += 6) {
+    const lote = resultados.slice(inicio, inicio + 6);
+    const respostas = await Promise.allSettled(
+      lote.map((pokemon: { name: string }) => buscarPokemon(pokemon.name)),
     );
+    for (const resposta of respostas) {
+      if (resposta.status === "fulfilled") pokemons.push(resposta.value);
+    }
+  }
+
+  if (pokemons.length === 0 && resultados.length > 0) {
+    throw new Error("Não foi possível consultar os Pokémon na PokéAPI.");
+  }
 
   return pokemons;
 }

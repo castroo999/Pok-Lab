@@ -41,7 +41,6 @@ export default function Jogos({
         <option value="Legends Arceus">Legends Arceus</option>
         <option value="Scarlet">Scarlet</option>
         <option value="Violet">Violet</option>
-        <option value="Legends Z-A">Legends Z-A</option>
       </select>
 
       <div className="opcoes">
