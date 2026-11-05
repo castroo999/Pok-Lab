@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import TeamBuilder from './pages/TeamBuilder'
 import TimesSalvos from "./pages/TimesSalvos";
 import { Pokedex } from "./pages/Pokedex";
+import { PokeTermo } from "./pages/PokeTermo";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/pokedex" element={<Pokedex />} />
         <Route path="/team-builder" element={<TeamBuilder />} />
         <Route path="/salvos" element={<TimesSalvos />} />
+        <Route path="/poketermo" element={<PokeTermo />} />
       </Routes>
     </>
   );

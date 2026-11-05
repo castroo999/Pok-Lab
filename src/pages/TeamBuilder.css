@@ -235,3 +235,22 @@
   border-color: #3b82f6;
   background: #111f38;
 }
+
+@media (max-width: 1000px) {
+  .builder-topo { padding: 30px 22px; }
+  .time { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+}
+
+@media (max-width: 600px) {
+  .builder-topo { padding: 22px 14px; }
+  .builder-topo h1 { margin-top: 24px; font-size: 20px; line-height: 1.5; }
+  .builder-topo > p { font-size: 16px; line-height: 1.4; }
+  .time { grid-template-columns: minmax(0, 1fr); margin-top: 24px; }
+  .pokemon-slot { min-height: 0; padding: 18px 14px; }
+  .pokemon-slot img, .sem-gif { width: 112px; height: 112px; }
+  .resultado-time { margin-top: 38px; }
+  .resultado-header { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .resultado-header h2 { font-size: 15px; line-height: 1.6; }
+  .golpe span:first-child { font-size: 12px; }
+  .tipo-golpe { font-size: 10px; }
+}

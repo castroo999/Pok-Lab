@@ -40,6 +40,9 @@ const [sprite, setSprite] = useState<string | null>(null);
         <a href="/team-builder" className="btn">
           Montar Times
         </a>
+        <a href="/poketermo" className="btn">
+          Jogar PokéTermo
+        </a>
       </div>
     </section>
   );

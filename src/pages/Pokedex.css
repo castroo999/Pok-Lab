@@ -287,3 +287,32 @@
 .fairy {
   background: #ee99ac;
 }
+
+@media (max-width: 1000px) {
+  .pokedex-container { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .pokedex-topo { padding: 28px 20px; }
+  .pokedex-container { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .pokedex-pokemon { padding: 14px; }
+  .pokedex-pokemon img { width: 100px; height: 100px; }
+  .buscar { flex-wrap: wrap; }
+}
+
+@media (max-width: 540px) {
+  .pokedex-topo { padding: 22px 14px; }
+  .pokedex-topo h1 { margin: 26px 0; font-size: 20px; }
+  .buscar { display: grid; grid-template-columns: 1fr 1fr; width: 100%; gap: 8px; }
+  .input-busca { width: 100%; grid-column: 1 / -1; }
+  .buscar button { min-height: 42px; }
+  .regioes { margin-bottom: 22px; }
+  .regioes select { width: 100%; }
+  .pokedex-container { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pokedex-pokemon { padding: 12px 8px; }
+  .pokedex-pokemon h2 { font-size: 15px; overflow-wrap: anywhere; }
+  .pokedex-pokemon img { width: 88px; height: 88px; }
+  .pokedex-type { padding: 4px 7px; font-size: 10px; }
+  .btn-container { gap: 8px; }
+  .btn-container button { flex: 1; padding: 10px 8px; font-size: 12px; }
+}

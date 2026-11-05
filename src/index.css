@@ -14,7 +14,13 @@
 body {
   font-family: var(--font-main);
   background-color: #0B1325;
+  min-width: 320px;
+  overflow-x: hidden;
 }
+
+#root { min-height: 100vh; }
+
+img { max-width: 100%; }
 
 h1,
 h2,
